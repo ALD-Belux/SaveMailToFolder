@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Exchange.WebServices.Data;
-using System.IO;
-using System.Text.RegularExpressions;
+﻿using Microsoft.Exchange.WebServices.Data;
 using Serilog;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace SaveMailToFolderLibrary
 {
     public class RetrieveMails
     {
-
         private string mailboxSMTP;
         private ExchangeService service;
 
@@ -31,12 +30,10 @@ namespace SaveMailToFolderLibrary
                 Log.Error(ex, "Failed while trying to create ExchangeService");
                 throw;
             }
-            
         }
 
         public string sendTest(string recipient)
         {
-
             try
             {
                 EmailMessage message = new EmailMessage(service);
@@ -47,15 +44,11 @@ namespace SaveMailToFolderLibrary
                 message.SendAndSaveCopy();
 
                 return "Message sent";
-
             }
             catch (Exception ex)
             {
-
                 return "Error: " + ex;
             }
-            
-
         }
 
         public void SaveInboxToEml(string path, bool delete = false, bool saveToEML = true)
@@ -91,12 +84,12 @@ namespace SaveMailToFolderLibrary
                     {
                         view.Offset += pageSize;
                     }
-                }                
+                }
 
                 if (emails.Count > 0)
                 {
                     Log.Debug("{nbEmails} founds. Get properties.", emails.Count);
-                    
+
                     //PropertySet properties = (BasePropertySet.FirstClassProperties); //A PropertySet with the explicit properties you want goes here
                     PropertySet properties = new PropertySet(ItemSchema.Subject, ItemSchema.MimeContent);
                     service.LoadPropertiesForItems(emails, properties);
@@ -104,14 +97,14 @@ namespace SaveMailToFolderLibrary
                     Log.Debug("Save to eml enabled: {saveToEML}", saveToEML);
 
                     foreach (EmailMessage msg in emails)
-                    {                        
+                    {
                         MimeContent mimcon = msg.MimeContent;
                         string timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
                         string filename = MakeValidFileName(CleanSubject(msg.Subject));
 
                         if (path.Length + filename.Length > 230)
                         {
-                            filename = filename.Substring(0, ( 230 - path.Length));
+                            filename = filename.Substring(0, (230 - path.Length));
                         }
 
                         string emlFile = string.Format("{0}\\{1}-{2}.eml", path, filename, timestamp);
@@ -120,13 +113,12 @@ namespace SaveMailToFolderLibrary
 
                         try
                         {
-                            if(saveToEML)
+                            if (saveToEML)
                             {
                                 FileStream fStream = new FileStream(emlFile, FileMode.Create);
                                 fStream.Write(mimcon.Content, 0, mimcon.Content.Length);
                                 fStream.Close();
                             }
-
                         }
                         catch (Exception ex)
                         {
@@ -138,12 +130,12 @@ namespace SaveMailToFolderLibrary
                     }
 
                     Log.Debug("Delete mail? {DeleteMail}", delete);
-                    if(delete)
+                    if (delete)
                     {
                         Log.Information("Start Bulk Delete of {nbMailsToDelete} mails", allResultsID.Count);
                         service.DeleteItems(allResultsID, DeleteMode.SoftDelete, SendCancellationsMode.SendToNone, AffectedTaskOccurrence.AllOccurrences);
                     }
-                }                
+                }
             }
             catch (Exception ex)
             {
@@ -163,11 +155,12 @@ namespace SaveMailToFolderLibrary
 
         private static string CleanSubject(string subject)
         {
-            switch (subject.ToLower().Substring(0,3))
+            switch (subject.ToLower().Substring(0, 3))
             {
                 case "re:":
                 case "fw:":
                     return subject.Substring(3, subject.Length - 3).Trim();
+
                 default:
                     return subject.Trim();
             }

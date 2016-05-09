@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SaveMailToFolderLibrary;
+﻿using SaveMailToFolderLibrary;
 using Serilog;
-
+using System;
 
 namespace SaveMailTo_FolderConsole
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            
             string mailboxSMTP = Properties.Settings.Default.MailboxSMTP;
             string testMail = Properties.Settings.Default.RecipientTest;
             bool deleteWhenSaved = Properties.Settings.Default.DeleteWhenSaved;

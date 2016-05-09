@@ -1,23 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.ServiceProcess;
-using System.Text;
+﻿using Serilog;
 using System.Threading;
-using System.Threading.Tasks;
-using Serilog;
-using Serilog.Sinks.RollingFile;
-using SaveMailToFolderService;
-
 
 namespace SaveMailToFolderService
 {
-    static class Program
+    internal static class Program
     {
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
-        static void Main()
+        private static void Main()
         {
             Log.Logger = new LoggerConfiguration()
                             .ReadFrom.AppSettings()
@@ -25,7 +16,6 @@ namespace SaveMailToFolderService
 
             Log.Debug("Hello Serilog!");
             Log.Information("Starting Process");
-
 
 #if (!DEBUG)
             ServiceBase[] ServicesToRun;
@@ -35,9 +25,9 @@ namespace SaveMailToFolderService
             };
             ServiceBase.Run(ServicesToRun);
 #else
-            //Debug code: this allows the process to run 
+            //Debug code: this allows the process to run
             // as a non-service. It will kick off the
-            // service start point, and then run the 
+            // service start point, and then run the
             // sleep loop below.
             SaveMailSVC service = new SaveMailSVC();
             service.Start();
@@ -47,7 +37,6 @@ namespace SaveMailToFolderService
                 Thread.Sleep(10000);
             service.Stop();
 #endif
-
         }
     }
 }

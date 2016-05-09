@@ -1,32 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Linq;
-using System.ServiceProcess;
-using System.Text;
-using System.Timers;
-using SaveMailToFolderLibrary;
+﻿using SaveMailToFolderLibrary;
 using Serilog;
-
+using System;
+using System.ServiceProcess;
+using System.Timers;
 
 namespace SaveMailToFolderService
 {
     public partial class SaveMailSVC : ServiceBase
     {
+        private string mailboxSMTP = Properties.Settings.Default.MailboxSMTP;
+        private string testMail = Properties.Settings.Default.RecipientTest;
+        private bool deleteWhenSaved = Properties.Settings.Default.DeleteWhenSaved;
+        private Microsoft.Exchange.WebServices.Data.ExchangeVersion requestedServerVersion = Properties.Settings.Default.ExchangeVersion;
+        private string savePath = Properties.Settings.Default.SavePath;
+        private bool saveToEML = Properties.Settings.Default.SaveToEML;
 
-        string mailboxSMTP = Properties.Settings.Default.MailboxSMTP;
-        string testMail = Properties.Settings.Default.RecipientTest;
-        bool deleteWhenSaved = Properties.Settings.Default.DeleteWhenSaved;
-        Microsoft.Exchange.WebServices.Data.ExchangeVersion requestedServerVersion = Properties.Settings.Default.ExchangeVersion;
-        string savePath = Properties.Settings.Default.SavePath;
-        bool saveToEML = Properties.Settings.Default.SaveToEML;
-
-
-        bool methodRunning = false;
-        Timer timer = new Timer(Properties.Settings.Default.ProcessIntervalMs);
-        RetrieveMails rtMail;
+        private bool methodRunning = false;
+        private Timer timer = new Timer(Properties.Settings.Default.ProcessIntervalMs);
+        private RetrieveMails rtMail;
 
         public SaveMailSVC()
         {
@@ -36,7 +27,7 @@ namespace SaveMailToFolderService
         protected override void OnStart(string[] args)
         {
             bool run = true;
-            while(run)
+            while (run)
             {
                 run = !(Start());
             }
@@ -53,7 +44,7 @@ namespace SaveMailToFolderService
                 Log.Error("An error occured, please review previous logs");
                 return false;
             }
-           
+
             timer.Elapsed += Timer_Elapsed;
             timer.Enabled = true;
             return true;
@@ -63,8 +54,8 @@ namespace SaveMailToFolderService
         {
             methodRunning = true;
             try
-            {                
-                rtMail.SaveInboxToEml(savePath, deleteWhenSaved, saveToEML);                
+            {
+                rtMail.SaveInboxToEml(savePath, deleteWhenSaved, saveToEML);
             }
             catch (Exception)
             {
@@ -86,5 +77,3 @@ namespace SaveMailToFolderService
         }
     }
 }
-
-
