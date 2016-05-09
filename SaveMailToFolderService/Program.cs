@@ -1,5 +1,5 @@
 ﻿using Serilog;
-using System.Threading;
+using System.ServiceProcess;
 
 namespace SaveMailToFolderService
 {
