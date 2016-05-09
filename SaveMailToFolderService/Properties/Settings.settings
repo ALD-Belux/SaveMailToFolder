@@ -1,0 +1,27 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="SaveMailToFolderService.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="MailboxSMTP" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">example@aldautomotive.com</Value>
+    </Setting>
+    <Setting Name="RecipientTest" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">example@aldautomotive.com</Value>
+    </Setting>
+    <Setting Name="DeleteWhenSaved" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ExchangeVersion" Type="Microsoft.Exchange.WebServices.Data.ExchangeVersion" Scope="Application">
+      <Value Profile="(Default)">Exchange2010_SP2</Value>
+    </Setting>
+    <Setting Name="SavePath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">C:\tmp\saveMail</Value>
+    </Setting>
+    <Setting Name="SaveToEML" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ProcessIntervalMs" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">10000</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
